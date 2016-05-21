@@ -1,0 +1,16 @@
+#!/usr/bin/expect 
+
+set timeout 10
+set done 1
+spawn git pull
+while {$done} {
+   expect {
+      "(yes/no)?" {send "yes\r"}
+      "password:" {
+         send "git\r"
+         set done 0
+      }
+   }
+}
+expect eof
+exit

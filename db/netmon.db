@@ -1,0 +1,212 @@
+-- MySQL dump 10.13  Distrib 5.7.11, for Linux (x86_64)
+--
+-- Host: localhost    Database: netmon
+-- ------------------------------------------------------
+-- Server version	5.7.11
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `netmon`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `netmon` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `netmon`;
+
+--
+-- Table structure for table `city`
+--
+
+DROP TABLE IF EXISTS `city`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `city` char(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `city` (`city`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `city`
+--
+
+LOCK TABLES `city` WRITE;
+/*!40000 ALTER TABLE `city` DISABLE KEYS */;
+INSERT INTO `city` VALUES (1,'全部'),(2,'杭州');
+/*!40000 ALTER TABLE `city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detail`
+--
+
+DROP TABLE IF EXISTS `detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detail` (
+  `tdes` varchar(20) NOT NULL,
+  `line_no` varchar(32) DEFAULT NULL,
+  `isp_contact` varchar(32) DEFAULT NULL,
+  `t_address` varchar(100) DEFAULT NULL,
+  `t_contact` varchar(32) DEFAULT NULL,
+  `app_name` varchar(32) DEFAULT NULL,
+  `app_contact` varchar(32) DEFAULT NULL,
+  `line_fee` varchar(32) DEFAULT NULL,
+  `line_own` varchar(32) DEFAULT NULL,
+  `memo` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`tdes`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detail`
+--
+
+LOCK TABLES `detail` WRITE;
+/*!40000 ALTER TABLE `detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `device`
+--
+
+DROP TABLE IF EXISTS `device`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `ip` char(15) NOT NULL,
+  `dname` char(20) NOT NULL,
+  `pass1` char(20) DEFAULT NULL,
+  `pass2` char(20) DEFAULT NULL,
+  `pass3` char(20) DEFAULT NULL,
+  `corp` char(20) DEFAULT NULL,
+  `login_mode` int(8) DEFAULT NULL,
+  `user` char(20) NOT NULL,
+  `flag` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ip` (`ip`),
+  UNIQUE KEY `ip_2` (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `device`
+--
+
+LOCK TABLES `device` WRITE;
+/*!40000 ALTER TABLE `device` DISABLE KEYS */;
+/*!40000 ALTER TABLE `device` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `router`
+--
+
+DROP TABLE IF EXISTS `router`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `router` (
+  `rip` varchar(20) NOT NULL,
+  `rname` varchar(20) DEFAULT NULL,
+  `city` char(10) DEFAULT NULL,
+  `pass1` char(20) DEFAULT NULL,
+  `pass2` char(20) DEFAULT NULL,
+  `pass3` char(20) DEFAULT NULL,
+  `corp` varchar(20) DEFAULT NULL,
+  `login_mode` int(8) DEFAULT NULL,
+  PRIMARY KEY (`rip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `router`
+--
+
+LOCK TABLES `router` WRITE;
+/*!40000 ALTER TABLE `router` DISABLE KEYS */;
+/*!40000 ALTER TABLE `router` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `target`
+--
+
+DROP TABLE IF EXISTS `target`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `target` (
+  `tip` varchar(20) NOT NULL,
+  `tdes` varchar(20) NOT NULL DEFAULT '',
+  `isp` varchar(20) DEFAULT NULL,
+  `rtt` int(11) DEFAULT '0',
+  `pri` int(11) DEFAULT '1',
+  `city` char(10) DEFAULT NULL,
+  `rname` varchar(20) DEFAULT NULL,
+  `flag` int(11) DEFAULT NULL,
+  PRIMARY KEY (`tdes`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `target`
+--
+
+LOCK TABLES `target` WRITE;
+/*!40000 ALTER TABLE `target` DISABLE KEYS */;
+/*!40000 ALTER TABLE `target` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `city` char(10) DEFAULT NULL,
+  `name` char(20) DEFAULT NULL,
+  `pwd` char(32) DEFAULT NULL,
+  `mail1` varchar(120) DEFAULT '',
+  `mail2` varchar(120) DEFAULT '',
+  `phone` varchar(80) DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'全部','admin','bc8f5b073b1306b3e3bdeae44d329a2b','','',''),(4,'杭州','test','698d51a19d8a121ce581499d7b701668','','','');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-03-29 12:40:23

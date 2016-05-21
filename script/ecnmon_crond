@@ -1,0 +1,2 @@
+### 每5分钟采集线路信息
+*/5 * * * * python /var/www/html/netmon/script/EcnMon.py > /dev/null 2>&1

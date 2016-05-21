@@ -1,0 +1,5 @@
+### 每5分钟采集线路信息
+*/5 * * * * python /var/www/html/netmon/script/EcnMon.py > /dev/null 2>&1
+
+### 每月1日2点4分保存设备配置
+4 2 1 * * python /var/www/html/netmon/script/ConfSave.py > /dev/null 2>&1

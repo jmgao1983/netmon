@@ -1,0 +1,11 @@
+### 每5分钟采集线路信息
+*/5 * * * * python /var/www/html/netmon/script/EcnMon.py > /dev/null 2>&1
+
+### 每月1日2点4分保存设备配置
+4 2 1 * * python /var/www/html/netmon/script/ConfSave.py > /dev/null 2>&1
+
+### 每月1日1点4分备份数据库
+4 1 1 * * /bin/bash /var/www/html/netmon/script/bk.db.sh > /dev/null 2>&1
+
+### 每6个月1日1点3分备份登陆日志
+3 1 1 */6 * /bin/bash /var/www/html/netmon/script/bk.weblog.sh > /dev/null 2>&1

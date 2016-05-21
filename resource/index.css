@@ -1,0 +1,98 @@
+.header, .navi, .main, .footer, .edit, .person, .down, .device {
+   width:750px;
+   margin:0 auto;
+   position:relative;
+   z-index:0;
+}
+
+#logo img{
+   width: 276px;
+   height: 50px;
+   border: 0px;
+}
+#logo {
+  float: left;
+}
+#city {
+  float: left;
+}
+#user {
+   float: right;
+   font-size: 10px;
+}
+.navi ul{
+   /*去掉小圆点*/
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+}
+
+.navi li{
+   /*表项通过左浮动显示在同一行*/
+   float: left;
+   width: 100px;
+   background: #0066b3;
+   margin-right: 2px;
+}
+.navi a{
+   text-decoration: none;
+   line-height: 30px;
+   color: #fff;
+   text-align: center;
+   font-weight: bold;
+   display: block;
+}
+.navi a:hover{
+   opacity: 0.9;
+}
+.floatclear {
+   clear: both;
+}
+#display span,#display p {
+  /* text-align: center;*/
+   margin-right: 18px;
+}
+#display p {
+   font-weight: bold;
+}
+#display .up {
+   color: green;
+}
+#display .down {
+   color: red;
+}
+#display .disabled {
+   color: grey;
+}
+#rec_add {
+  display: none;
+}
+#display a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 12px;
+}
+#del_tdes {
+  color: red;
+  font-weight: bold;
+}
+#del_tip {
+  font-weight: bold;
+}
+#chpwd, #chmail, .panel {
+  border-style: dotted;
+  border-width: thin;
+  font-size: 9px;
+}
+#txt_out, .txt_warn {
+  color: red;
+  font-size: 9px;
+}
+#page_info, .txt_info {
+  color: blue;
+  font-size: 9px;
+}
+.txt_clean {
+  font-size: 9px;
+}
