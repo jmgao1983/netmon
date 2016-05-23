@@ -473,10 +473,10 @@ function add_device(obj){
    xhr = new XMLHttpRequest();
    xhr.onreadystatechange=function(){
       if(xhr.readyState==4 && xhr.status==200){
-         //alert(xhr.responseText);
+         alert(xhr.responseText);
          obj.disabled = false;
-         output.innerHTML = xhr.responseText;
-         var t=setTimeout("history.go(0)",2000);
+         //output.innerHTML = xhr.responseText;
+         //var t=setTimeout("history.go(0)",2000);
       }
    }
    var url = "ajax/ajax_add_router.php?rip=" + dip.value;

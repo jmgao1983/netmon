@@ -41,6 +41,7 @@ function xxq($sql){
    $db = mysqli_connect(_dbhost, _dbuser, _dbpwd, _dbname);
    $charset = 'set names utf8';
    mysqli_query($db,$charset);
+   //$sql = mysqli_real_escape_string($db, $sql);
    mysqli_query($db,$sql);
    $ret = mysqli_affected_rows($db);
    mysqli_close($db);

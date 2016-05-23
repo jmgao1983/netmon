@@ -49,14 +49,14 @@ if(isset($_SESSION['user'])){
    <?php //分页功能?>
    <div id="pagenav">
       <?php for($a=5; $a>0; $a--){?>
-         <a href="ConfManage.php?page=<?php echo $page-$a;?>&rnum=<?php echo $rnum ?>">
+         <a href="tool.php?page=<?php echo $page-$a;?>&rnum=<?php echo $rnum ?>">
             <?php if($page-$a>0){echo $page-$a;}?></a>
       <?php }?>
 
       <strong><?php echo $page; ?></strong>
 
       <?php for($b=1; $b<=5; $b++){ ?>
-         <a href="ConfManage.php?page=<?php echo $b+$page;?>&rnum=<?php echo $rnum ?>">
+         <a href="tool.php?page=<?php echo $b+$page;?>&rnum=<?php echo $rnum ?>">
             <?php if($b+$page<=(int)($total/$rnum)+1)echo $page+$b;?></a>
       <?php }?>
       <span>当前<strong><?php echo $total ?></strong>个设备</span>

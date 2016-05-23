@@ -5,6 +5,7 @@
 import pexpect, time
 from db_fun import xgetone
 from my_log import logger
+from my_crypt import my_decode
 
 ###class definition
 class NetLogin(object):
@@ -14,6 +15,12 @@ class NetLogin(object):
       sql = "select rname,pass1,pass2,pass3,login_mode,city from router where rip='%s'" % ip
       if xgetone(sql) != None:
          (self.name,self.pass1,self.pass2,self.pass3,self.login_mode,self.city) = xgetone(sql)
+         self.pass1 = my_decode(self.pass1,self.name)
+         self.pass2 = my_decode(self.pass2,self.name)
+         self.pass3 = my_decode(self.pass3,self.name)
+         print self.pass1
+         print self.pass2
+         print self.pass3
 
       """
       login_mode: describe how to login the device, it's an integer like '22011,23020'.
@@ -419,11 +426,12 @@ class NetLogin(object):
 ### test code
 if __name__ == '__main__':
 
-   NetLogin('34.0.30.35').test()
-   NetLogin('34.0.30.45').test()
-   NetLogin('34.0.223.2').test()
-   NetLogin('15.34.254.5').test()
-   NetLogin('15.34.81.253').test()
-   NetLogin('15.34.177.253').test()
-   NetLogin('15.34.49.99').test()
-   NetLogin('15.34.21.85').test()
+   #NetLogin('34.0.30.35').test()
+   #NetLogin('34.0.30.45').test()
+   #NetLogin('34.0.223.2').test()
+   #NetLogin('15.34.254.5').test()
+   #NetLogin('15.34.81.253').test()
+   #NetLogin('15.34.177.253').test()
+   #NetLogin('15.34.49.99').test()
+   #NetLogin('15.34.21.85').test()
+   NetLogin('34.1.3.25').test()
