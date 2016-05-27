@@ -35,7 +35,7 @@ if(isset($_SESSION['user'])){
      <p></p>
      手机号码(14小时):  <input type="text" id="phone" size="45"
                          value=<?php echo $re[0]['phone'] ?>><br/>
-     行内邮箱(24小时):  <input type="text" id="mail1" size="45"
+     内网邮箱(24小时):  <input type="text" id="mail1" size="45"
                          value=<?php echo $re[0]['mail1'] ?>><br/>
      外网邮箱(14小时):  <input type="text" id="mail2" size="45"
                          value=<?php echo $re[0]['mail2'] ?>>

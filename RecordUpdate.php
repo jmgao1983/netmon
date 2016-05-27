@@ -7,6 +7,11 @@ if(isset($_SESSION['user'])){
    //获取'接入点'下拉框中的设备列表
    $s_rname = xget($sql_rname);
 
+   //获取线路的告警手机和邮箱
+   $sql = "select mail1,mail2,phone from target where tdes='". $_GET['tdes']. "'";
+   $re = xget($sql);
+
+   //获取线路的详细信息
    $sql = "select * from detail where tdes='". $_GET['tdes']. "'";
    $det = xget($sql);
    if(count($det)){
@@ -66,6 +71,15 @@ if(isset($_SESSION['user'])){
       <option value='0'>关闭告警</option>
     </select>
     <span id="edit_info" class="txt_warn"></span>
+     <p>为该线路设置独立的告警手机和邮箱(可以留空)
+     填写多个号码、邮箱请以';'(英文分号)分隔
+     </p>
+     手机号码(14小时):  <input type="text" id="phone" size="45"
+                         value=<?php echo $re[0]['phone'] ?>><br/>
+     内网邮箱(24小时):  <input type="text" id="mail1" size="45"
+                         value=<?php echo $re[0]['mail1'] ?>><br/>
+     外网邮箱(14小时):  <input type="text" id="mail2" size="45"
+                         value=<?php echo $re[0]['mail2'] ?>>
     <p>
       <button onclick=edit_confirm(<?php 
         echo "'".$_GET['tdes']."'";?>)>应用</button>

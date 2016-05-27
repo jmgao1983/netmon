@@ -208,6 +208,32 @@ function ajax_det_target(tdes){
 
 function edit_confirm(tdes){
   if(edit_check()){
+      var phone=document.getElementById("phone").value;
+      var mail1=document.getElementById("mail1").value;
+      var mail2=document.getElementById("mail2").value;
+      mail1 = jstrim(mail1);
+      mail2 = jstrim(mail2);
+      phone = jstrim(phone);
+      if(phone != '' && !check_phone(phone)){
+         alert(phone + ':请检查手机号码格式！');
+         return;
+      }else{
+         //alert(phone + '号码格式正确');
+      }
+      if(mail1 != '' && !check_mail(mail1)){
+         alert(mail1 + ':请检查邮箱地址格式！');
+         return;
+      }else{
+         //alert(mail1 + '邮箱格式正确');
+      }
+      if(mail2 != '' && !check_mail(mail2)){
+         alert(mail2 + ':请检查邮箱地址格式！');
+         return;
+      }else{
+         //alert(mail2 + '邮箱格式正确');
+         //return;
+      }
+
     xhr = new XMLHttpRequest();
     xhr.onreadystatechange=function(){
       if(xhr.readyState==4 && xhr.status==200){
@@ -217,6 +243,9 @@ function edit_confirm(tdes){
     } 
     var url = "ajax/ajax_edit_target.php?rname="+data_edit[1]+"&tdes="+tdes
       + "&tip="+data_edit[0]+"&isp="+data_edit[2]+"&alert="+data_edit[3];
+    url = url + "&mail1=" + mail1;
+    url = url + "&mail2=" + mail2;
+    url = url + "&phone=" + phone;
     //用JS直接对URL编码(utf-8),不使用浏览器或者系统的编码规则
     url = encodeURI(url);
     xhr.open("GET",url,true);

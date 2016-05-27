@@ -25,9 +25,21 @@ def my_alert(msg, tdes):
    mail_ext = []     #获取外部邮箱列表
    detail = ''       #线路详细信息
    re = ()
-   sql = "select city, pri from target where tdes='%s'" % tdes
-   city, pri = xgetone(sql)
 
+   #获取该线路的单独告警邮箱和手机号码
+   sql = "select mail1,mail2,phone,city,pri from target where tdes='%s'" % tdes
+   (m1, m2, p, city, pri) = xgetone(sql)
+   if m1 != '' and m1 != None:
+      temp = (str(m1).strip(';')).split(';')
+      mail_int.extend(temp)
+   if m2 != '' and m2 != None:
+      temp = (str(m2).strip(';')).split(';')
+      mail_ext.extend(temp)
+   if p != '' and p != None:
+      temp = (str(p).strip(';')).split(';')
+      phone.extend(temp)
+
+   #获取用户所在城市的告警邮箱和手机号码
    sql="select mail1, mail2, phone from user where city='%s'" % city
    if xgetall(sql) != None:
       mlists = xgetall(sql)
@@ -57,6 +69,9 @@ def my_alert(msg, tdes):
          detail = detail + u"线路所属:" + re[8] + "\n"
          detail = detail + u"其他信息:" + re[9] + "\n"
 
+   #print mail_int
+   #print mail_ext
+   #print phone
    if mail_int != []:
       send_mail(timestr+msg, detail, mail_int)
    if mail_ext != []:

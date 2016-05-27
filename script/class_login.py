@@ -18,9 +18,9 @@ class NetLogin(object):
          self.pass1 = my_decode(self.pass1,self.name)
          self.pass2 = my_decode(self.pass2,self.name)
          self.pass3 = my_decode(self.pass3,self.name)
-         print self.pass1
-         print self.pass2
-         print self.pass3
+         #print self.pass1
+         #print self.pass2
+         #print self.pass3
 
       """
       login_mode: describe how to login the device, it's an integer like '22011,23020'.
