@@ -65,11 +65,11 @@ class NetLogin(object):
          return self.cisco_ssh_login2()
       elif self.login_mode == 22020:
          return self.h3c_ssh_login1()
-      elif self.login_mode == 22021:
+      elif self.login_mode == 22022:
          return self.h3c_ssh_login2()
       elif self.login_mode == 22030:
          return self.huawei_ssh_login1()
-      elif self.login_mode == 22031:
+      elif self.login_mode == 22032:
          return self.huawei_ssh_login2()
       elif self.login_mode == 23010 or self.login_mode == 23040:
          return self.cisco_tel_login1()
@@ -193,7 +193,7 @@ class NetLogin(object):
          return ssh
          
 
-   ##login_mode 22021
+   ##login_mode 22022
    def h3c_ssh_login2(self):
       try:
          logger.debug(self.ip + " Connecting...")
