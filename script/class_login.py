@@ -81,6 +81,8 @@ class NetLogin(object):
          return self.h3c_tel_login1()
       elif self.login_mode == 23021:
          return self.h3c_tel_login2()
+      elif self.login_mode == 23022:
+         return self.h3c_tel_login3()
       else:
          logger.error(self.ip + ' Error login_mode!')
          return None
@@ -434,6 +436,32 @@ class NetLogin(object):
          i = tel.expect(['>', 'ssword:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error super password!")
+            tel.close()
+            return None
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         tel.close()
+         return None
+      else:
+         logger.debug(self.ip + " Logged in!")
+         return tel
+
+   ##login_mode 23022
+   def h3c_tel_login3(self):
+      try:
+         logger.debug(self.ip + " Connecting...")
+         tel=pexpect.spawn('telnet %s' % self.ip)
+         i=tel.expect(['name:','refused','fail','time',pexpect.TIMEOUT], timeout=15)
+         if i >= 1 :
+            logger.error(self.ip + " Can not reach the remote router!")
+            tel.close()
+            return None
+         tel.sendline(self.pass1)
+         i = tel.expect('word:',timeout=2)
+         tel.sendline(self.pass2)
+         i = tel.expect(['>','name:',pexpect.TIMEOUT], timeout=5)
+         if i == 1:
+            logger.error(self.ip + " Invald password!")
             tel.close()
             return None
       except Exception as e:
