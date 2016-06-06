@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import threading
-import class_monitor
+import threading, class_netmon
 from db_fun import xgetall
 from my_log import logger
 from netmon_env import envi
@@ -11,7 +10,7 @@ from netmon_env import envi
 thread_count = envi['threads']
 
 #//获取router表的所有条目数
-sql = "select rip from router"
+sql = "select rip from router where app=3"
 ret = xgetall(sql)
 all = len(ret)
 if all == 0:
@@ -20,7 +19,7 @@ if all == 0:
 
 ###//新建调用函数
 def rt_mon(ip):
-   r = class_monitor.router(ip)
+   r = class_netmon.NetMon(ip)
    r.mon()
 
 ###//新建多线程进行监控
