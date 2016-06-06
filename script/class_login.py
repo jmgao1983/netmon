@@ -63,12 +63,14 @@ class NetLogin(object):
          return self.cisco_ssh_login1()
       elif self.login_mode == 22011:
          return self.cisco_ssh_login2()
-      elif self.login_mode == 22020 or self.login_mode == 22030:
+      elif self.login_mode == 22020:
          return self.h3c_ssh_login1()
-      elif self.login_mode == 22021 or self.login_mode == 22031:
-         return self.h3c_ssh_sa_login1()
-      elif self.login_mode == 22022:
-         return self.h3c_ssh_login3()
+      elif self.login_mode == 22021:
+         return self.h3c_ssh_login2()
+      elif self.login_mode == 22030:
+         return self.huawei_ssh_login1()
+      elif self.login_mode == 22031:
+         return self.huawei_ssh_login2()
       elif self.login_mode == 23010 or self.login_mode == 23040:
          return self.cisco_tel_login1()
       elif self.login_mode == 23011 or self.login_mode == 23041:
@@ -157,7 +159,8 @@ class NetLogin(object):
    def h3c_ssh_login1(self):
       try:
          logger.debug(self.ip + " Connecting...")
-         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         #ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
          if i == 1:
@@ -191,10 +194,11 @@ class NetLogin(object):
          
 
    ##login_mode 22021
-   def h3c_ssh_sa_login1(self):
+   def h3c_ssh_login2(self):
       try:
          logger.debug(self.ip + " Connecting...")
-         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         #ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
          if i == 1:
@@ -218,12 +222,11 @@ class NetLogin(object):
          logger.debug(self.ip + " Logged in!")
          return ssh
 
-
-   ##login_mode 22022
-   def h3c_ssh_login3(self):
+   ##login_mode=22030, huawei_ssh_login1
+   def huawei_ssh_login1(self):
       try:
          logger.debug(self.ip + " Connecting...")
-         ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
          if i == 1:
@@ -255,6 +258,34 @@ class NetLogin(object):
          logger.debug(self.ip + " Logged in!")
          return ssh
          
+
+   ##login_mode 22031
+   def huawei_ssh_login2(self):
+      try:
+         logger.debug(self.ip + " Connecting...")
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         i=ssh.expect(['word:', 'continue connecting (yes/no)?',
+           'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
+         if i == 1:
+            ssh.sendline('yes')
+            ssh.expect('word:',timeout=3)
+         if i >= 2:
+            logger.error(self.ip + " Can not reach the remote router!")
+            ssh.close()
+            return None
+         ssh.sendline(self.pass2)
+         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         if i == 1:
+            logger.error(self.ip + " Error username or password!")
+            ssh.close()
+            return None
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         ssh.close()
+         return None
+      else:
+         logger.debug(self.ip + " Logged in!")
+         return ssh
 
    #login_mode=23010, cisco_tel_login1
    def cisco_tel_login1(self):
@@ -426,12 +457,13 @@ class NetLogin(object):
 ### test code
 if __name__ == '__main__':
 
-   #NetLogin('34.0.30.35').test()
-   #NetLogin('34.0.30.45').test()
-   #NetLogin('34.0.223.2').test()
-   #NetLogin('15.34.254.5').test()
-   #NetLogin('15.34.81.253').test()
-   #NetLogin('15.34.177.253').test()
-   #NetLogin('15.34.49.99').test()
-   #NetLogin('15.34.21.85').test()
+   NetLogin('34.0.30.35').test()
+   NetLogin('34.0.30.45').test()
+   NetLogin('34.0.223.2').test()
+   NetLogin('15.34.254.5').test()
+   NetLogin('15.34.81.253').test()
+   NetLogin('15.34.177.253').test()
+   NetLogin('15.34.49.99').test()
+   NetLogin('15.34.21.85').test()
    NetLogin('34.1.3.25').test()
+   NetLogin('34.112.31.2').test()

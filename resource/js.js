@@ -504,6 +504,7 @@ function add_device(obj){
       if(xhr.readyState==4 && xhr.status==200){
          alert(xhr.responseText);
          obj.disabled = false;
+         history.go(0);
          //output.innerHTML = xhr.responseText;
          //var t=setTimeout("history.go(0)",2000);
       }
@@ -531,17 +532,14 @@ function input_pass(obj){
       return false;
    }
    var p_pass = document.getElementById("pass");
+   var strhtml = '1<input type="password" id="pass1" size="8">';
+   strhtml = strhtml + '2<input type="password" id="pass2" size="8">';
    if(i == 1){
-      var strhtml = '用户名<input type="password" id="pass1" size="8">';
-      strhtml = strhtml + '密码1<input type="password" id="pass2" size="8">';
-      strhtml = strhtml + '密码2<input type="password" id="pass3" size="8">';
-      p_pass.innerHTML = strhtml;
+      strhtml = strhtml + '3<input type="password" id="pass3" size="8">';
    }else{
-      var strhtml = '密码1<input type="password" id="pass1" size="8">';
-      strhtml = strhtml + '密码2<input type="password" id="pass2" size="8">';
       strhtml = strhtml + '<input id="pass3" size="2" value="notnull" disabled=true hidden>';
-      p_pass.innerHTML = strhtml;
    }
+   p_pass.innerHTML = strhtml;
    return true;
 }
 

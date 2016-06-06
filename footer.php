@@ -1,6 +1,6 @@
    <div class = "footer">
       <hr/>
-      <span class='txt_clean'>NetMon出品 Version<b>1.5.0</b>
+      <span class='txt_clean'>NetMon出品 Version<b>1.5.1</b>
         <a href='index.php'>|主页|</a>
         <a href='admin.php'>管理员|</a>
         <a href='version.php'>更新日志|</a>

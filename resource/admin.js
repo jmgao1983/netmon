@@ -273,7 +273,7 @@ function sw_ecnmon(){
 
 
 function update_server(obj){
-   var msg= "提示:升级版本后需要重新进行[参数设置]\n确定需要升级版本吗?"
+   var msg= "提示:某些版本升级后可能需要额外配置\n确定需要升级版本吗?"
    var r=confirm(msg);
    if(r){
       obj.disabled = true;

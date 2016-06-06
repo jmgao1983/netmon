@@ -69,8 +69,9 @@ if(isset($_SESSION['user']) && $_SESSION['user']=='admin'){
      </select>
      <select id = "s_auth" onchange=input_pass(this)>
        <option value='-1'>登陆方式</option>
-       <option value='0'>usr+pwd+sup</option>
-       <option value='1'>pwd+sup</option>
+       <option value='0'>用户|密码1|密码2</option>
+       <option value='1'>密码1|密码2</option>
+       <option value='2'>用户|密码</option>
      </select>
      <button onclick=ajax_add_router(this)>添加</button>&nbsp;
      <span id="txt_out" class="txt_warn"></span>

@@ -12,7 +12,7 @@
       $out = '';
       $output = $output. "比对配置文件\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines conf.old conf 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines conf.old conf | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
@@ -20,7 +20,7 @@
       $out = '';
       $output = $output. "比对模块信息\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines mod.old mod 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines mod.old mod | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
@@ -28,7 +28,7 @@
       $out = '';
       $output = $output. "比对端口信息\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines int.old int 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines int.old int | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
@@ -36,7 +36,7 @@
       $out = '';
       $output = $output. "比对stp信息\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines stp.old stp 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines stp.old stp | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
@@ -44,7 +44,7 @@
       $out = '';
       $output = $output. "比对路由汇总信息\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines rtsum.old rtsum 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines rtsum.old rtsum | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
@@ -52,7 +52,7 @@
       $out = '';
       $output = $output. "比对路由明细信息\n";
       $cmd = 'cd '. $path;
-      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines route.old route 2>&1';
+      $cmd = $cmd. ';diff -a -s -y --suppress-common-lines route.old route | sed "s/\r\t\t\t\t\t\t\t//g" 2>&1';
       exec($cmd, $out, $ret);
       for($i=0; $i<count($out); $i++){
          $output = $output. $out[$i]. "\n";
