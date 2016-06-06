@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import md5
+import hashlib
 
 def my_encode(txt, seed):
-   tmp = md5.new((seed).encode('UTF-8')).hexdigest()
+   tmp = hashlib.md5((seed).encode('UTF-8')).hexdigest()
    i = 0
    N = len(txt)
    r = ''
@@ -20,7 +20,7 @@ def my_encode(txt, seed):
    return r
    
 def my_decode(txt, seed):
-   tmp = md5.new((seed).encode('UTF-8')).hexdigest()
+   tmp = hashlib.md5((seed).encode('UTF-8')).hexdigest()
    i = 0
    N = len(txt)
    r = ''
