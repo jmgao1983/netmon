@@ -61,7 +61,7 @@ class NetLogin(object):
          return None
       if self.login_mode == 22010:
          return self.cisco_ssh_login1()
-      elif self.login_mode == 22011:
+      elif self.login_mode == 22012:
          return self.cisco_ssh_login2()
       elif self.login_mode == 22020:
          return self.h3c_ssh_login1()
@@ -75,13 +75,13 @@ class NetLogin(object):
          return self.cisco_tel_login1()
       elif self.login_mode == 23011 or self.login_mode == 23041:
          return self.cisco_tel_login2()
-      elif self.login_mode == 23013 or self.login_mode == 23043:
-         return self.cisco_tel_login4()
-      elif self.login_mode == 23020:
+      elif self.login_mode == 23012 or self.login_mode == 23042:
+         return self.cisco_tel_login3()
+      elif self.login_mode == 23020 or self.login_mode == 23030:
          return self.h3c_tel_login1()
-      elif self.login_mode == 23021:
+      elif self.login_mode == 23021 or self.login_mode == 23031:
          return self.h3c_tel_login2()
-      elif self.login_mode == 23022:
+      elif self.login_mode == 23022 or self.login_mode == 23032:
          return self.h3c_tel_login3()
       else:
          logger.error(self.ip + ' Error login_mode!')
@@ -129,7 +129,7 @@ class NetLogin(object):
          return ssh
 
 
-   #login_mode=22011, cisco_ssh_login2 for GD AAA auth
+   #login_mode=22012, cisco_ssh_login2 for GD AAA auth
    def cisco_ssh_login2(self):
       try:
          logger.debug(self.ip + " Connecting...")
@@ -261,7 +261,7 @@ class NetLogin(object):
          return ssh
          
 
-   ##login_mode 22031
+   ##login_mode 22032
    def huawei_ssh_login2(self):
       try:
          logger.debug(self.ip + " Connecting...")
@@ -356,20 +356,20 @@ class NetLogin(object):
          logger.debug(self.ip + " Logged in!")
          return tel
 
-   ##login_mode 23013 for GD AAA auth login
-   def cisco_tel_login4(self):
+   ##login_mode 23012 for GD AAA auth login
+   def cisco_tel_login3(self):
       try:
          logger.debug(self.ip + " Connecting...")
          tel=pexpect.spawn('telnet %s' % self.ip)
-         i=tel.expect(['word:','refused','fail','time',pexpect.TIMEOUT], timeout=15)
+         i=tel.expect(['name:','refused','fail','time',pexpect.TIMEOUT], timeout=15)
          if i >= 1:
             logger.error(self.ip + " Can not reach the remote router!")
             tel.close()
             return None
          tel.sendline(self.pass1)
-         i = tel.expect(['#', 'word:', pexpect.TIMEOUT], timeout=5)
+         i = tel.expect(['#', 'name:', pexpect.TIMEOUT], timeout=5)
          if i == 1:
-            logger.error(self.ip + " Invald password!")
+            logger.error(self.ip + " Invald username or password!")
             tel.close()
             return None
       except Exception as e:

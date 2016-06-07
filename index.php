@@ -6,10 +6,10 @@ include 'header-index.php';
 $city = get_city();
 if($city == '全部'){
    $mysql = "select * from target where pri<5 ";
-   $sql_rname = "select rname from router order by rname";
+   $sql_rname = "select rname from router where app=3 order by rname";
 }else{
    $mysql = "select * from target where city='". $city. "' ";
-   $sql_rname = "select rname from router where city='". $city. "' order by rname";
+   $sql_rname = "select rname from router where app=3 and city='". $city. "' order by rname";
 }
 //var_dump($mysql);
 

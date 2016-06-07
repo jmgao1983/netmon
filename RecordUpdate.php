@@ -2,7 +2,7 @@
 include 'header.php';
 //判断是否登录用户，否则返回主页
 if(isset($_SESSION['user'])){
-   $sql_rname = "select rname from router where city in (select city from target where tdes='".
+   $sql_rname = "select rname from router where app=3 and city in (select city from target where tdes='".
                   $_GET['tdes']. "')";
    //获取'接入点'下拉框中的设备列表
    $s_rname = xget($sql_rname);
