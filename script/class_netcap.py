@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #'RPing(Remote Ping): auto-login net devices and check status'
 
-import pexpect, os, time, md5, class_login
+import pexpect, os, time, hashlib, class_login
 from db_fun import xgetone
 from my_log import logger
 
@@ -223,7 +223,7 @@ class NetCap(class_login.NetLogin):
    ##cisco_save file
    def cisco_save(self):
       logger.debug(self.ip + ' start to save info to disk')
-      city = md5.new((self.city).encode('UTF-8')).hexdigest()
+      city = hashlib.md5((self.city).encode('UTF-8')).hexdigest()
       fpath = r'/var/www/html/netmon/down/cap/%s/%s' % (city, self.name)
       if not os.path.exists(fpath):
          try:
@@ -288,7 +288,7 @@ class NetCap(class_login.NetLogin):
    ##h3c_save file
    def h3c_save(self):
       logger.debug(self.ip + ' start to save info to disk')
-      city = md5.new((self.city).encode('UTF-8')).hexdigest()
+      city = hashlib.md5((self.city).encode('UTF-8')).hexdigest()
       fpath = r'/var/www/html/netmon/down/cap/%s/%s' % (city, self.name)
       if not os.path.exists(fpath):
          try:

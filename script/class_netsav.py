@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #'RPing(Remote Ping): auto-login net devices and save config'
 
-import pexpect, os, time, md5, class_login
+import pexpect, os, time, hashlib, class_login
 from db_fun import xgetone, xgetall
 from my_log import logger
 
@@ -149,7 +149,7 @@ class NetSav(class_login.NetLogin):
       logger.debug(self.ip + ' start to save config to disk')
 
       fname = self.name + '-' + timestr
-      city = md5.new((self.city).encode('UTF-8')).hexdigest()
+      city = hashlib.md5((self.city).encode('UTF-8')).hexdigest()
       fpath = r'/var/www/html/netmon/down/conf/%s/%s' % (city, self.name)
       if not os.path.exists(fpath):
          try:
