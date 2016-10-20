@@ -4,7 +4,7 @@ session_start();
 ?>
 <html>
    <head>
-      <title>外联监控</title>
+      <title>网络辅助管理平台</title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <link href="resource/index.css" rel="stylesheet" type="text/css" />
       <script src="resource/js.js" type="text/javascript"></script>

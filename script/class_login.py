@@ -161,8 +161,8 @@ class NetLogin(object):
    def h3c_ssh_login1(self):
       try:
          logger.debug(self.ip + " Connecting...")
-         #ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
-         ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         #ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
          if i == 1:

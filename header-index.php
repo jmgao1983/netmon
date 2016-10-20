@@ -8,7 +8,7 @@ $cities = xget($sql);
 ?>
 <html>
    <head>
-      <title>外联监控</title>
+      <title>网络辅助管理平台</title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="keywords" content="网络监控,外联监控,智能监控,网管平台">
       <!--每隔300秒自动刷新页面-->

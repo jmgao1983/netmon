@@ -568,7 +568,8 @@ function check_dname(str){
     return false;
   //var reg=/^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9])+((DX)|(HS)|(LT)|(YD))$/;
   //var reg=/^w+$/;
-  var reg=/^[A-Za-z0-9_]+$/;
+  //var reg=/^[A-Za-z0-9_]+$/;
+  var reg=/^[\w\d\._-]+$/;
   if(reg.test(str)){
     return true;
   }else{
