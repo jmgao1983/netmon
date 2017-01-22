@@ -6,3 +6,4 @@ script/*.pyc
 script/netmon_env*
 script/my_ftp*
 *.html
+*.gif

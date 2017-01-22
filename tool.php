@@ -70,7 +70,7 @@ if(isset($_SESSION['user'])){
       <option value='02'>h3c</option>
       <option value='03'>huawei</option>
       <option value='04'>ruijie</option>
-      <option value='05'>juniper</option>
+      <option value='05'>junos</option>
       <option value='99'>...</option>
    </select>
    <input type="text" id="txt_dname" size="10" value="设备名称">

@@ -162,6 +162,7 @@ class NetLogin(object):
       try:
          logger.debug(self.ip + " Connecting...")
          ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+	 #openssh-6.6.1p1-25 登陆h3c的bug，必须用下行的ssh连接方法
          #ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
