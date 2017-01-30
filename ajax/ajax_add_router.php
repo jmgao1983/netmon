@@ -22,11 +22,11 @@
      //return;
      $re = xxq($sql);
      if($re == 1){
-        $msg = 'admin添加router:'. $rip. "成功";
+        $msg = $_SESSION['user']. '添加router:'. $rip. "成功";
         $logger->info($msg);
         echo $msg;
      }else{
-        $msg = 'admin添加router:'. $rip. "失败";
+        $msg = $_SESSION['user']. '添加router:'. $rip. "失败";
         $logger->info($msg);
         echo $msg;
      }
