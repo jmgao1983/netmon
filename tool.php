@@ -7,6 +7,7 @@ if(isset($_SESSION['user'])){
    }else{
       $mysql = "select corp,rname,rip from router where app>=2 and city='". $_SESSION['city']. "'";
    }
+   $mysql = $mysql . " order by rname";
    //获取当前分页页面和每页显示行数
    $rnum = isset($_GET['rnum']) ? $_GET['rnum'] : 10;
    $page = isset($_GET['page']) ? $_GET['page'] : 1;

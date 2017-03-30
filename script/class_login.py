@@ -5,7 +5,6 @@
 import pexpect, time
 from db_fun import xgetone
 from my_log import logger
-from my_crypt import my_decode
 
 ###class definition
 class NetLogin(object):
@@ -15,13 +14,9 @@ class NetLogin(object):
       sql = "select rname,pass1,pass2,pass3,login_mode,city from router where rip='%s'" % ip
       if xgetone(sql) != None:
          (self.name,self.pass1,self.pass2,self.pass3,self.login_mode,self.city) = xgetone(sql)
-         self.pass1 = my_decode(self.pass1,self.name)
-         self.pass2 = my_decode(self.pass2,self.name)
-         self.pass3 = my_decode(self.pass3,self.name)
-         #print self.pass1
-         #print self.pass2
-         #print self.pass3
 
+      self.wait1 = self.name + '>'
+      self.wait2 = self.name + '#'
       """
       login_mode: describe how to login the device, it's an integer like '22011,23020'.
          --first two digits imply the protocol used;
@@ -83,6 +78,8 @@ class NetLogin(object):
          return self.h3c_tel_login2()
       elif self.login_mode == 23022 or self.login_mode == 23032:
          return self.h3c_tel_login3()
+      elif self.login_mode == 22052:
+         return self.junos_ssh_login1()
       else:
          logger.error(self.ip + ' Error login_mode!')
          return None
@@ -107,7 +104,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -115,7 +112,7 @@ class NetLogin(object):
          ssh.sendline('en')
          ssh.expect('word:')
          ssh.sendline(self.pass3)
-         i = ssh.expect(['#', '>', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait2, self.wait1, pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " ERROR super password!")
             ssh.close()
@@ -144,7 +141,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['#', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait2, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -174,7 +171,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -182,7 +179,7 @@ class NetLogin(object):
          ssh.sendline('sup')
          ssh.expect('ssword:',timeout=1)
          ssh.sendline(self.pass3)
-         i = ssh.expect(['>', 'ssword:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'ssword:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error super password!")
             ssh.close()
@@ -200,8 +197,8 @@ class NetLogin(object):
    def h3c_ssh_login2(self):
       try:
          logger.debug(self.ip + " Connecting...")
-         #ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
-         ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         #ssh=pexpect.spawn('ssh -1 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
            'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
          if i == 1:
@@ -212,7 +209,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -240,7 +237,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -248,7 +245,7 @@ class NetLogin(object):
          ssh.sendline('sup')
          ssh.expect('ssword:',timeout=1)
          ssh.sendline(self.pass3)
-         i = ssh.expect(['>', 'ssword:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'ssword:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error super password!")
             ssh.close()
@@ -268,7 +265,7 @@ class NetLogin(object):
          logger.debug(self.ip + " Connecting...")
          ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
          i=ssh.expect(['word:', 'continue connecting (yes/no)?',
-           'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=8)
+           'fail', 'refused', 'time', pexpect.TIMEOUT], timeout=20)
          if i == 1:
             ssh.sendline('yes')
             ssh.expect('word:',timeout=3)
@@ -277,7 +274,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect(['>', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -303,7 +300,7 @@ class NetLogin(object):
          tel.sendline(self.pass1)
          i = tel.expect('word:',timeout=2)
          tel.sendline(self.pass2)
-         i = tel.expect(['>','name:',pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait1,'name:',pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Error username or password!")
             tel.close()
@@ -311,7 +308,7 @@ class NetLogin(object):
          tel.sendline('en')
          tel.expect('word:',timeout=1)
          tel.sendline(self.pass3)
-         i = tel.expect(['#', '>', pexpect.TIMEOUT], timeout=3)
+         i = tel.expect([self.wait2, self.wait1, pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " ERROR super password!")
             tel.close()
@@ -336,7 +333,7 @@ class NetLogin(object):
             tel.close()
             return None
          tel.sendline(self.pass1)
-         i = tel.expect(['>', 'word:', pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Invald password!")
             tel.close()
@@ -344,7 +341,7 @@ class NetLogin(object):
          tel.sendline('en')
          tel.expect('word:',timeout=1)
          tel.sendline(self.pass2)
-         i = tel.expect(['#', 'word:', pexpect.TIMEOUT], timeout=3)
+         i = tel.expect([self.wait2, 'word:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " ERROR super password!")
             tel.close()
@@ -368,7 +365,7 @@ class NetLogin(object):
             tel.close()
             return None
          tel.sendline(self.pass1)
-         i = tel.expect(['#', 'name:', pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait2, 'name:', pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Invald username or password!")
             tel.close()
@@ -394,7 +391,7 @@ class NetLogin(object):
          tel.sendline(self.pass1)
          i = tel.expect('word:',timeout=2)
          tel.sendline(self.pass2)
-         i = tel.expect(['>','name:',pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait1,'name:',pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Invald password!")
             tel.close()
@@ -402,7 +399,7 @@ class NetLogin(object):
          tel.sendline('sup')
          tel.expect('ssword:',timeout=1)
          tel.sendline(self.pass3)
-         i = tel.expect(['>', 'ssword:', pexpect.TIMEOUT], timeout=3)
+         i = tel.expect([self.wait1, 'ssword:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error super password!")
             tel.close()
@@ -426,7 +423,7 @@ class NetLogin(object):
             tel.close()
             return None
          tel.sendline(self.pass1)
-         i = tel.expect(['>','word:', pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait1,'word:', pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Invald password!")
             tel.close()
@@ -434,7 +431,7 @@ class NetLogin(object):
          tel.sendline('sup')
          tel.expect('ssword:',timeout=1)
          tel.sendline(self.pass2)
-         i = tel.expect(['>', 'ssword:', pexpect.TIMEOUT], timeout=3)
+         i = tel.expect([self.wait1, 'ssword:', pexpect.TIMEOUT], timeout=3)
          if i == 1:
             logger.error(self.ip + " Error super password!")
             tel.close()
@@ -460,7 +457,7 @@ class NetLogin(object):
          tel.sendline(self.pass1)
          i = tel.expect('word:',timeout=2)
          tel.sendline(self.pass2)
-         i = tel.expect(['>','name:',pexpect.TIMEOUT], timeout=5)
+         i = tel.expect([self.wait1,'name:',pexpect.TIMEOUT], timeout=5)
          if i == 1:
             logger.error(self.ip + " Invald password!")
             tel.close()
@@ -472,6 +469,34 @@ class NetLogin(object):
       else:
          logger.debug(self.ip + " Logged in!")
          return tel
+
+   #login_mode=22052, junos_ssh_login1
+   def junos_ssh_login1(self):
+      try:
+         logger.debug(self.ip + " Connecting...")
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         i=ssh.expect(['word:', 'continue connecting (yes/no)?',
+            'refused', 'fail', 'time', pexpect.TIMEOUT], timeout=8)
+         if i == 1:
+            ssh.sendline('yes')
+            ssh.expect('word:',timeout=3)
+         if i >= 2:
+            logger.error(self.ip + " Can not reach the remote router!")
+            ssh.close()
+            return None
+         ssh.sendline(self.pass2)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
+         if i == 1:
+            logger.error(self.ip + " Error username or password!")
+            ssh.close()
+            return None
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         ssh.close()
+         return None
+      else:
+         logger.debug(self.ip + " Logged in!")
+         return ssh
 
    ##logout
    def logout(self, obj):

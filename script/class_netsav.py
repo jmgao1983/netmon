@@ -24,6 +24,8 @@ class NetSav(class_login.NetLogin):
          self.huawei_save(self.login())
       elif provider == 4:
          self.cisco_save(self.login())
+      elif provider == 5:
+         self.junos_save(self.login())
       else:
          logger.error(self.ip + ' Error : device with unknown provider!')
 
@@ -46,7 +48,7 @@ class NetSav(class_login.NetLogin):
             obj.close()
             return
          self.txt_conf = obj.before
-
+         '''
          #copy run start
          logger.debug(self.ip + ' executing [write]')
          obj.sendline('write')
@@ -55,7 +57,7 @@ class NetSav(class_login.NetLogin):
             logger.error(self.ip + ' error exec [write]')
             obj.close()
             return
-
+         '''
          logger.debug(self.ip + ' logged out!')
          obj.close()
       except Exception as e:
@@ -84,7 +86,7 @@ class NetSav(class_login.NetLogin):
             obj.close()
             return
          self.txt_conf = obj.before
-
+         '''
          #save config
          logger.debug(self.ip + ' executing [save]')
          obj.sendline("save safe\ny\n\ny\n")
@@ -93,7 +95,7 @@ class NetSav(class_login.NetLogin):
             logger.error(self.ip + ' error exec [save]')
             obj.close()
             return
-
+         '''
          logger.debug(self.ip + ' logged out!')
          obj.close()
       except Exception as e:
@@ -108,30 +110,67 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         str_h3c = self.name + '>'
-         obj.sendline('sys\nuser-interface vty 0 4\nscreen-length 0\n')
-         obj.expect(self.name + ']', timeout=2)
-
+         str_huawei = self.name + '>'
+         obj.sendline('sys')
+         obj.expect(']', timeout=2)
+         obj.sendline('user-interface vty 0 4')
+         obj.expect(']', timeout=2)
+         obj.sendline('screen-length 0')
+         obj.expect(']', timeout=2)
+         obj.sendline('quit')
+         obj.expect(']', timeout=2)
+         obj.sendline('quit')
+         obj.expect(str_huawei, timeout=2)
+         
          #capture running-configration
          logger.debug(self.ip + ' executing [disp curr]')
          obj.sendline('disp curr')
-         i = obj.expect([str_h3c, pexpect.TIMEOUT], timeout=60)
+         i = obj.expect([str_huawei, pexpect.TIMEOUT], timeout=60)
          if i == 1:
             logger.error(self.ip + ' error exec [disp curr]')
             obj.close()
             return
          self.txt_conf = obj.before
-
-         obj.sendline('undo screen-length\nquit\nquit\n')
-
+         '''
          #save config
          logger.debug(self.ip + ' executing [save]')
-         obj.sendline("save\ny\n\ny\n")
-         i = obj.expect([str_h3c, pexpect.TIMEOUT], timeout=100)
+         obj.sendline("save\ny")
+         i = obj.expect([str_huawei, pexpect.TIMEOUT], timeout=100)
          if i == 1:
             logger.error(self.ip + ' error exec [save]')
             obj.close()
             return
+         '''
+         obj.sendline('sys')
+         obj.sendline('user-interface vty 0 4')
+         obj.sendline('undo screen-length')
+         logger.debug(self.ip + ' logged out!')
+         obj.close()
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         obj.close()
+         return
+      else:
+         self.save_to_disk()
+
+   #junos
+   def junos_save(self, obj):
+      if obj == None:
+         return
+      try:
+         str_junos = self.name + '>'
+         obj.sendline('set cli screen-length 0')
+         obj.expect([str_junos, pexpect.TIMEOUT], timeout=2)
+
+         #capture running-configration
+         logger.debug(self.ip + ' executing [show config]')
+         obj.sendline('show config')
+         i = obj.expect([str_junos, pexpect.TIMEOUT], timeout=20)
+         if i == 1:
+            logger.error(self.ip + ' error exec [show config]')
+            obj.close()
+            return
+         self.txt_conf = obj.before
 
          logger.debug(self.ip + ' logged out!')
          obj.close()
@@ -141,6 +180,7 @@ class NetSav(class_login.NetLogin):
          return
       else:
          self.save_to_disk()
+
 
 
    ##save config to disk
