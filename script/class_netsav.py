@@ -16,7 +16,7 @@ class NetSav(class_login.NetLogin):
    def save(self):
       #check 'login_mode' describe in 'class_login.py'
       provider = (self.login_mode % 1000) / 10
-      if provider == 1:
+      if provider == 1 or provider == 6:
          self.cisco_save(self.login())
       elif provider == 2:
          self.h3c_save(self.login())
@@ -35,14 +35,13 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         str_cisco = self.name + '#'
          obj.sendline('terminal len 0')
-         obj.expect([str_cisco, pexpect.TIMEOUT], timeout=2)
+         obj.expect([self.wait2, pexpect.TIMEOUT], timeout=2)
 
          #capture running-configration
          logger.debug(self.ip + ' executing [sh run]')
          obj.sendline('sh run')
-         i = obj.expect([str_cisco, pexpect.TIMEOUT], timeout=20)
+         i = obj.expect([self.wait2, pexpect.TIMEOUT], timeout=20)
          if i == 1:
             logger.error(self.ip + ' error exec [sh run]')
             obj.close()
@@ -52,7 +51,7 @@ class NetSav(class_login.NetLogin):
          #copy run start
          logger.debug(self.ip + ' executing [write]')
          obj.sendline('write')
-         i = obj.expect([str_cisco, pexpect.TIMEOUT], timeout=100)
+         i = obj.expect([self.wait2, pexpect.TIMEOUT], timeout=100)
          if i == 1:
             logger.error(self.ip + ' error exec [write]')
             obj.close()
@@ -73,14 +72,13 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         str_h3c = self.name + '>'
          obj.sendline('screen-length disable')
-         obj.expect(str_h3c, timeout=2)
+         obj.expect(self.wait1, timeout=2)
 
          #capture running-configration
          logger.debug(self.ip + ' executing [disp curr]')
          obj.sendline('disp curr')
-         i = obj.expect([str_h3c, pexpect.TIMEOUT], timeout=80)
+         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=80)
          if i == 1:
             logger.error(self.ip + ' error exec [disp curr]')
             obj.close()
@@ -90,7 +88,7 @@ class NetSav(class_login.NetLogin):
          #save config
          logger.debug(self.ip + ' executing [save]')
          obj.sendline("save safe\ny\n\ny\n")
-         i = obj.expect([str_h3c, pexpect.TIMEOUT], timeout=100)
+         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=100)
          if i == 1:
             logger.error(self.ip + ' error exec [save]')
             obj.close()
@@ -110,7 +108,6 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         str_huawei = self.name + '>'
          obj.sendline('sys')
          obj.expect(']', timeout=2)
          obj.sendline('user-interface vty 0 4')
@@ -120,12 +117,12 @@ class NetSav(class_login.NetLogin):
          obj.sendline('quit')
          obj.expect(']', timeout=2)
          obj.sendline('quit')
-         obj.expect(str_huawei, timeout=2)
+         obj.expect(self.wait1, timeout=2)
          
          #capture running-configration
          logger.debug(self.ip + ' executing [disp curr]')
          obj.sendline('disp curr')
-         i = obj.expect([str_huawei, pexpect.TIMEOUT], timeout=60)
+         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=60)
          if i == 1:
             logger.error(self.ip + ' error exec [disp curr]')
             obj.close()
@@ -135,7 +132,7 @@ class NetSav(class_login.NetLogin):
          #save config
          logger.debug(self.ip + ' executing [save]')
          obj.sendline("save\ny")
-         i = obj.expect([str_huawei, pexpect.TIMEOUT], timeout=100)
+         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=100)
          if i == 1:
             logger.error(self.ip + ' error exec [save]')
             obj.close()
@@ -158,14 +155,13 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         str_junos = self.name + '>'
          obj.sendline('set cli screen-length 0')
-         obj.expect([str_junos, pexpect.TIMEOUT], timeout=2)
+         obj.expect([self.wait1, pexpect.TIMEOUT], timeout=2)
 
          #capture running-configration
          logger.debug(self.ip + ' executing [show config]')
          obj.sendline('show config')
-         i = obj.expect([str_junos, pexpect.TIMEOUT], timeout=20)
+         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=20)
          if i == 1:
             logger.error(self.ip + ' error exec [show config]')
             obj.close()

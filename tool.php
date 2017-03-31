@@ -9,7 +9,7 @@ if(isset($_SESSION['user'])){
    }
    $mysql = $mysql . " order by rname";
    //获取当前分页页面和每页显示行数
-   $rnum = isset($_GET['rnum']) ? $_GET['rnum'] : 10;
+   $rnum = isset($_GET['rnum']) ? $_GET['rnum'] : 15;
    $page = isset($_GET['page']) ? $_GET['page'] : 1;
    $count = ($page - 1) * $rnum;
    $sql = $mysql." limit $count,$rnum";
@@ -72,6 +72,7 @@ if(isset($_SESSION['user'])){
       <option value='03'>huawei</option>
       <option value='04'>ruijie</option>
       <option value='05'>junos</option>
+      <option value='06'>dell</option>
       <option value='99'>...</option>
    </select>
    <input type="text" id="txt_dname" size="10" value="设备名称">
