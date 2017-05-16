@@ -84,6 +84,8 @@ class NetLogin(object):
          return self.dell_ssh_login1()
       elif self.login_mode == 23062:
          return self.dell_tel_login1()
+      elif self.login_mode == 22072:
+         return self.linux_ssh_login1()
       else:
          logger.error(self.ip + ' Error login_mode!')
          return None
@@ -556,6 +558,34 @@ class NetLogin(object):
       else:
          logger.debug(self.ip + " Logged in!")
          return tel
+
+   #login_mode=22072, linux_ssh_login1
+   def linux_ssh_login1(self):
+      try:
+         logger.debug(self.ip + " Connecting...")
+         ssh=pexpect.spawn('ssh -p 22 %s@%s' %(self.pass1, self.ip))
+         i=ssh.expect(['word:', 'continue connecting (yes/no)?',
+            'refused', 'fail', 'time', pexpect.TIMEOUT], timeout=8)
+         if i == 1:
+            ssh.sendline('yes')
+            ssh.expect('word:',timeout=3)
+         if i >= 2:
+            logger.error(self.ip + " Can not reach the remote router!")
+            ssh.close()
+            return None
+         ssh.sendline(self.pass2)
+         i = ssh.expect(['[#$]', 'word:', pexpect.TIMEOUT], timeout=3)
+         if i >= 1:
+            logger.error(self.ip + " Error username or password!")
+            ssh.close()
+            return None
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         ssh.close()
+         return None
+      else:
+         logger.debug(self.ip + " Logged in!")
+         return ssh
 
    ##logout
    def logout(self, obj):

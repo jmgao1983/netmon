@@ -54,6 +54,7 @@ if(isset($_SESSION['user']) && $_SESSION['user']=='admin'){
        <option value='04'>ruijie</option>
        <option value='05'>junos</option>
        <option value='06'>dell</option>
+       <option value='07'>linux</option>
        <option value='99'>...</option>
      </select>
      <input type="text" id="txt_dname" size="10" value="设备名称">

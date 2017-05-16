@@ -12,6 +12,8 @@ cisco_Fail = 'Success rate is 0 percent'
 cisco_Succ = 'min/avg/max = [0-9]([0-9])*'
 h3c_Fail = '100.00*% packet loss'
 h3c_Succ = 'min/avg/max(\/std-dev)* = [0-9]([0-9])*'
+linux_Fail = '100% packet loss'
+linux_Succ = 'min/avg/max/mdev = [0-9]([0-9])*'
 
 ###class definition
 class NetMon(class_login.NetLogin):
@@ -37,6 +39,8 @@ class NetMon(class_login.NetLogin):
          self.h3c_ping(self.login())
       elif provider == 4:
          self.ruijie_ping(self.login())
+      elif provider == 7:
+         self.linux_ping(self.login())
       else:
          logger.error(self.ip + ' Error : device with unknown provider!')
 
@@ -102,9 +106,7 @@ class NetMon(class_login.NetLogin):
                   msg = self.name+line[1]+':up->down!'
                   my_alert(msg, line[1])
             if i == 0:
-               print obj.after
                rtt = int(obj.after.split(' ')[2])
-               print rtt
                if line[2] == 0:
                   msg = self.name+line[1]+':down->up!'
                   my_alert(msg, line[1])
@@ -160,15 +162,46 @@ class NetMon(class_login.NetLogin):
          logger.info(self.ip + " monitoring finished!")
          return
 
+   ##linux_ping
+   def linux_ping(self, obj):
+      if obj == None:
+         return
+      list_tdes = []
+      list_rtts = []
+      try:
+         for line in self.target:
+            logger.debug(self.ip + ' ping -c 2 ' + line[0])
+            obj.sendline('ping -c 2 ' + line[0])
+            rtt = 0
+            i=obj.expect([linux_Succ, linux_Fail, pexpect.TIMEOUT], timeout=15)
+            if i == 2:
+               logger.error(self.ip + " Command runs abnormal!")
+               obj.close()
+               return
+            if i == 1:
+               if line[2] > 0:
+                  msg = self.name+line[1]+':up->down!'
+                  my_alert(msg, line[1])
+            if i == 0:
+               rtt = int(obj.after.split(' ')[2])
+               if line[2] == 0:
+                  msg = self.name+line[1]+':down->up!'
+                  my_alert(msg, line[1])
+            list_tdes.append(line[1])
+            list_rtts.append(rtt)
+         obj.close()
+         #批量更新线路延迟数据rtt,减少数据库访问
+         mupdate(list_tdes, list_rtts)
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         obj.close()
+         return
+      else:
+         logger.info(self.ip + " monitoring finished!")
+         return
+
 
 ### test code
 if __name__ == '__main__':
 
-   NetMon('34.0.30.35').mon()
-   NetMon('34.0.30.45').mon()
-   NetMon('34.0.223.2').mon()
-   NetMon('15.34.254.5').mon()
-   NetMon('15.34.81.253').mon()
-   NetMon('15.34.177.253').mon()
-   NetMon('15.34.49.99').mon()
-   NetMon('15.34.21.85').mon()
+   NetMon('10.33.128.60').mon()
