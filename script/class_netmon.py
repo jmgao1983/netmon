@@ -9,9 +9,9 @@ from my_log import logger
 
 ###global variables setting
 cisco_Fail = 'Success rate is 0 percent'
-cisco_Succ = 'min/avg/max = [0-9]*'
-h3c_Fail = '100.00% packet loss'
-h3c_Succ = cisco_Succ
+cisco_Succ = 'min/avg/max = [0-9]([0-9])*'
+h3c_Fail = '100.00*% packet loss'
+h3c_Succ = 'min/avg/max(\/std-dev)* = [0-9]([0-9])*'
 
 ###class definition
 class NetMon(class_login.NetLogin):
@@ -102,7 +102,9 @@ class NetMon(class_login.NetLogin):
                   msg = self.name+line[1]+':up->down!'
                   my_alert(msg, line[1])
             if i == 0:
+               print obj.after
                rtt = int(obj.after.split(' ')[2])
+               print rtt
                if line[2] == 0:
                   msg = self.name+line[1]+':down->up!'
                   my_alert(msg, line[1])

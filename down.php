@@ -4,7 +4,7 @@ include 'header.php';
 <div class = "down">
 <h4>资源下载</h4>
 <a href="down/pub/">公共资源</a><br/>
-用户手册:netmon.docx&nbsp;&nbsp;<a href="down/netmon.docx">下载</a><br/>
+用户手册:netmon.docx&nbsp;&nbsp;<a href="">下载</a><br/>
 <?php
 if(isset($_SESSION['user'])){
    $conf_path = 'down/conf/'. md5($_SESSION['city']);
