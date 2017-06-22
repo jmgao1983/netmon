@@ -128,7 +128,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
 
@@ -157,7 +157,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    ##login_mode=22020, h3c_ssh_login1
@@ -177,7 +177,7 @@ class NetLogin(object):
             ssh.close()
             return None
          ssh.sendline(self.pass2)
-         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect([self.wait1, 'word:', pexpect.TIMEOUT], timeout=5)
          if i >= 1:
             logger.error(self.ip + " Error username or password!")
             ssh.close()
@@ -195,7 +195,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
          
 
@@ -225,7 +225,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    ##login_mode=22030, huawei_ssh_login1
@@ -261,7 +261,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
          
 
@@ -290,7 +290,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    #login_mode=23010, cisco_tel_login1
@@ -325,7 +325,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    #login_mode=23011, cisco_tel_login2
@@ -357,7 +357,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    ##login_mode 23012 for GD AAA auth login
@@ -381,7 +381,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    ##login_mode 23020
@@ -415,7 +415,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    ##login_mode 23021
@@ -447,7 +447,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    ##login_mode 23022
@@ -473,7 +473,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    #login_mode=22052, junos_ssh_login1
@@ -501,7 +501,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    #login_mode=22062, dell_ssh_login1
@@ -529,7 +529,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    #login_mode=23062, dell_tel_login1
@@ -556,7 +556,7 @@ class NetLogin(object):
          tel.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return tel
 
    #login_mode=22072, linux_ssh_login1
@@ -584,7 +584,7 @@ class NetLogin(object):
          ssh.close()
          return None
       else:
-         logger.debug(self.ip + " Logged in!")
+         logger.info(self.ip + " Logged in!")
          return ssh
 
    ##logout

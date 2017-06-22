@@ -564,7 +564,7 @@ function rm_device(ip){
 }
 
 function check_dname(str){
-  if(str.length > 20)
+  if(str.length > 30)
     return false;
   //var reg=/^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9])+((DX)|(HS)|(LT)|(YD))$/;
   //var reg=/^w+$/;

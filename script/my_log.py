@@ -12,8 +12,8 @@ logger.setLevel(envi['log_lvl'])
 File1 = '/var/www/html/netmon/log/netmon.log'
 FM = '%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s'
 DF = '%Y-%m-%d %H:%M:%S'
-#定义RotatingFileHandler，最多备份3个日志文件，每个日志文件2M
-RH = RotatingFileHandler(File1, 'a', 2*1024*1024, 3)
+#定义RotatingFileHandler，最多备份5个日志文件，每个日志文件5M
+RH = RotatingFileHandler(File1, 'a', 5*1024*1024, 5)
 RH.setLevel(logging.DEBUG)
 RH.setFormatter(logging.Formatter(FM,DF))
 logger.addHandler(RH)

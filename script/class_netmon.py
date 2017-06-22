@@ -14,6 +14,8 @@ h3c_Fail = '100.00*% packet loss'
 h3c_Succ = 'min/avg/max(\/std-dev)* = [0-9]([0-9])*'
 linux_Fail = '100% packet loss'
 linux_Succ = 'min/avg/max/mdev = [0-9]([0-9])*'
+junos_Fail = '100% packet loss'
+junos_Succ = 'min/avg/max/stddev = [0-9]([0-9])*'
 
 ###class definition
 class NetMon(class_login.NetLogin):
@@ -39,6 +41,8 @@ class NetMon(class_login.NetLogin):
          self.h3c_ping(self.login())
       elif provider == 4:
          self.ruijie_ping(self.login())
+      elif provider == 5:
+         self.junos_ping(self.login())
       elif provider == 7:
          self.linux_ping(self.login())
       else:
@@ -136,6 +140,44 @@ class NetMon(class_login.NetLogin):
             obj.sendline('ping ' + line[0] + ' ntimes 2')
             rtt = 0
             i=obj.expect([cisco_Succ, cisco_Fail, pexpect.TIMEOUT], timeout=10)
+            if i == 2:
+               logger.error(self.ip + " Command runs abnormal!")
+               obj.close()
+               return
+            if i == 1:
+               if line[2] > 0:
+                  msg = self.name+line[1]+':up->down!'
+                  my_alert(msg, line[1])
+            if i == 0:
+               rtt = int(obj.after.split(' ')[2])
+               if line[2] == 0:
+                  msg = self.name+line[1]+':down->up!'
+                  my_alert(msg, line[1])
+            list_tdes.append(line[1])
+            list_rtts.append(rtt)
+         obj.close()
+         #批量更新线路延迟数据rtt,减少数据库访问
+         mupdate(list_tdes, list_rtts)
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         obj.close()
+         return
+      else:
+         logger.info(self.ip + " monitoring finished!")
+         return
+
+   ##junos_ping
+   def junos_ping(self, obj):
+      if obj == None:
+         return
+      list_tdes = []
+      list_rtts = []
+      try:
+         for line in self.target:
+            logger.debug(self.ip + ' ping count 2 ' + line[0])
+            obj.sendline('ping count 2 ' + line[0])
+            rtt = 0
+            i=obj.expect([junos_Succ, junos_Fail, pexpect.TIMEOUT], timeout=15)
             if i == 2:
                logger.error(self.ip + " Command runs abnormal!")
                obj.close()
