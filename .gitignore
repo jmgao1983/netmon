@@ -7,3 +7,5 @@ script/netmon_env*
 script/my_ftp*
 *.html
 *.gif
+.ropeproject/
+script/.ropeproject/

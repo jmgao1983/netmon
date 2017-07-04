@@ -5,6 +5,7 @@
 import pexpect, time
 from db_fun import xgetone
 from my_log import logger
+from my_crypt import mycrypt
 
 ###class definition
 class NetLogin(object):
@@ -14,6 +15,13 @@ class NetLogin(object):
       sql = "select rname,pass1,pass2,pass3,login_mode,city from router where rip='%s'" % ip
       if xgetone(sql) != None:
          (self.name,self.pass1,self.pass2,self.pass3,self.login_mode,self.city) = xgetone(sql)
+
+      self.pass1 = mycrypt.decrypt(self.pass1)
+      self.pass2 = mycrypt.decrypt(self.pass2)
+      self.pass3 = mycrypt.decrypt(self.pass3)
+      #print self.pass1
+      #print self.pass2
+      #print self.pass3
 
       self.wait1 = self.name + '>'
       self.wait2 = self.name + '#'
@@ -25,7 +33,7 @@ class NetLogin(object):
       Supported protocols: {'22': 'ssh', '23': 'telnet'}
       Supported providers: {'01': 'cisco', '02': 'h3c', '03': 'huawei', '04': 'ruijie'}
       Supported auth-modes: {'0': 'pwd1+pwd2+pwd3', '1': 'pwd1+pwd2'}
-      Example: to login a cisco router(IP:1.1.1.1) in linux shell, 
+      Example: to login a cisco router(IP:1.1.1.1) in linux shell,
          --type 'ssh admin@1.1.1.1'
          when prompt 'admin@1.1.1.1's password:'
          --type 'cs1234' to login in non-priviledged mode
@@ -90,7 +98,7 @@ class NetLogin(object):
          logger.error(self.ip + ' Error login_mode!')
          return None
 
-   ## test to login, then to logout 
+   ## test to login, then to logout
    def test(self):
       return self.logout(self.login())
 
@@ -197,7 +205,7 @@ class NetLogin(object):
       else:
          logger.info(self.ip + " Logged in!")
          return ssh
-         
+
 
    ##login_mode 22022
    def h3c_ssh_login2(self):
@@ -263,7 +271,7 @@ class NetLogin(object):
       else:
          logger.info(self.ip + " Logged in!")
          return ssh
-         
+
 
    ##login_mode 22032
    def huawei_ssh_login2(self):
