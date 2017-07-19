@@ -108,17 +108,9 @@ class NetSav(class_login.NetLogin):
       if obj == None:
          return
       try:
-         obj.sendline('sys')
-         obj.expect(']', timeout=2)
-         obj.sendline('user-interface vty 0 4')
-         obj.expect(']', timeout=2)
          obj.sendline('screen-length 0')
-         obj.expect(']', timeout=2)
-         obj.sendline('quit')
-         obj.expect(']', timeout=2)
-         obj.sendline('quit')
          obj.expect(self.wait1, timeout=2)
-         
+
          #capture running-configration
          logger.debug(self.ip + ' executing [disp curr]')
          obj.sendline('disp curr')
@@ -138,9 +130,6 @@ class NetSav(class_login.NetLogin):
             obj.close()
             return
          '''
-         obj.sendline('sys')
-         obj.sendline('user-interface vty 0 4')
-         obj.sendline('undo screen-length')
          logger.debug(self.ip + ' logged out!')
          obj.close()
       except Exception as e:
