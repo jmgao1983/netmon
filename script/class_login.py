@@ -12,9 +12,9 @@ class NetLogin(object):
    def __init__(self, ip):
       self.ip = ip
       self.name = ''
-      sql = "select rname,pass1,pass2,pass3,login_mode,city from router where rip='%s'" % ip
+      sql = "select rname,pass1,pass2,pass3,login_mode,city,corp from router where rip='%s'" % ip
       if xgetone(sql) != None:
-         (self.name,self.pass1,self.pass2,self.pass3,self.login_mode,self.city) = xgetone(sql)
+         (self.name,self.pass1,self.pass2,self.pass3,self.login_mode,self.city,self.corp) = xgetone(sql)
 
       self.pass1 = mycrypt.decrypt(self.pass1)
       self.pass2 = mycrypt.decrypt(self.pass2)
