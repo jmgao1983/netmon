@@ -93,7 +93,7 @@ class NetLogin(object):
       elif self.login_mode == 23062:
          return self.dell_tel_login1()
       elif self.login_mode == 22072:
-         return self.linux_ssh_login1()
+         return self.linux_ssh_login2()
       else:
          logger.error(self.ip + ' Error login_mode!')
          return None
@@ -585,6 +585,24 @@ class NetLogin(object):
          i = ssh.expect(['[#$]', 'word:', pexpect.TIMEOUT], timeout=3)
          if i >= 1:
             logger.error(self.ip + " Error username or password!")
+            ssh.close()
+            return None
+      except Exception as e:
+         logger.error(self.ip + ' ' + str(e))
+         ssh.close()
+         return None
+      else:
+         logger.info(self.ip + " Logged in!")
+         return ssh
+
+   #login_mode=22072, linux_ssh_login2: using key ( ssh-copy-id )
+   def linux_ssh_login2(self):
+      try:
+         logger.debug(self.ip + " Connecting...")
+         ssh=pexpect.spawn('ssh %s@%s' %(self.pass1, self.ip))
+         i = ssh.expect(['[#$]', pexpect.TIMEOUT], timeout=3)
+         if i >= 1:
+            logger.error(self.ip + " Error login using ssh key!")
             ssh.close()
             return None
       except Exception as e:
