@@ -1,4 +1,4 @@
-device = {
+device_netcap = {
     'cisco': {
         'prompt': '#',
         'page': 'terminal len 0',
@@ -54,5 +54,33 @@ device = {
         'mod': ['sh module', 'sh invent', 'sh envi'],
         'int': ['sh int status', 'sh ip int b'],
         'stp': ['sh spanning-tree root id'],
+    },
+}
+
+device_netmon = {
+    'cisco': {
+        'succ': 'min/avg/max = [0-9]([0-9])*',
+        'fail': 'Success rate is 0 percent',
+        'ping': 'ping\n\n%s\n2\n\n\n\n\n',
+    },
+    'h3c': {
+        'succ': 'min/avg/max(\/std-dev)* = [0-9]([0-9])*',
+        'fail': '100.00*% packet loss',
+        'ping': 'ping -c 2 %s',
+    },
+    'huawei': {
+        'succ': 'min/avg/max(\/std-dev)* = [0-9]([0-9])*',
+        'fail': '100.00*% packet loss',
+        'ping': 'ping -c 2 %s',
+    },
+    'junos': {
+        'succ': 'min/avg/max/stddev = [0-9]([0-9])*',
+        'fail': '100% packet loss',
+        'ping': 'ping count 2 %s',
+    },
+    'linux': {
+        'succ': 'min/avg/max/mdev = [0-9]([0-9])*', 
+        'fail': '100% packet loss',
+        'ping':  'ping -c 2 %s',
     },
 }

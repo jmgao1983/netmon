@@ -6,7 +6,7 @@ import pexpect, os, hashlib
 from class_login import NetLogin
 from my_log import logger
 from netmon_env import base_dir
-from NetworkDevice import device
+from NetworkDevice import device_netcap
 
 ###class definition
 class NetCap(NetLogin):
@@ -20,7 +20,7 @@ class NetCap(NetLogin):
       self.re_route = ''
 
    def capture(self):
-      if device.get(self.corp) == None:
+      if device_netcap.get(self.corp) == None:
          logger.error(self.ip + ' Error : unsupported device to capture!')
          return
       obj = self.login()
@@ -28,15 +28,15 @@ class NetCap(NetLogin):
          logger.error(self.ip + ' Error : capture failure due to login error!')
          return
       
-      prompt = self.name + device.get(self.corp).get('prompt')
-      pageCmd = device.get(self.corp).get('page')
+      prompt = self.name + device_netcap.get(self.corp).get('prompt')
+      pageCmd = device_netcap.get(self.corp).get('page')
       cmdSet = {
-         'conf': device.get(self.corp).get('conf'),
-         'routesum': device.get(self.corp).get('routesum'),
-         'route': device.get(self.corp).get('route'),
-         'mod': device.get(self.corp).get('mod'),
-         'int': device.get(self.corp).get('int'),
-         'stp': device.get(self.corp).get('stp')
+         'conf': device_netcap.get(self.corp).get('conf'),
+         'routesum': device_netcap.get(self.corp).get('routesum'),
+         'route': device_netcap.get(self.corp).get('route'),
+         'mod': device_netcap.get(self.corp).get('mod'),
+         'int': device_netcap.get(self.corp).get('int'),
+         'stp': device_netcap.get(self.corp).get('stp')
       }
       try:
          obj.sendline(pageCmd)

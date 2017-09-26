@@ -93,7 +93,7 @@ class NetLogin(object):
       elif self.login_mode == 23062:
          return self.dell_tel_login1()
       elif self.login_mode == 22072:
-         return self.linux_ssh_login2()
+         return self.linux_ssh_login1()
       else:
          logger.error(self.ip + ' Error login_mode!')
          return None
@@ -600,7 +600,7 @@ class NetLogin(object):
       try:
          logger.debug(self.ip + " Connecting...")
          ssh=pexpect.spawn('ssh %s@%s' %(self.pass1, self.ip))
-         i = ssh.expect(['[#$]', pexpect.TIMEOUT], timeout=3)
+         i = ssh.expect(['$', pexpect.TIMEOUT], timeout=8)
          if i >= 1:
             logger.error(self.ip + " Error login using ssh key!")
             ssh.close()
@@ -626,13 +626,5 @@ class NetLogin(object):
 ### test code
 if __name__ == '__main__':
 
-   NetLogin('34.0.30.35').test()
-   NetLogin('34.0.30.45').test()
-   NetLogin('34.0.223.2').test()
-   NetLogin('15.34.254.5').test()
-   NetLogin('15.34.81.253').test()
-   NetLogin('15.34.177.253').test()
-   NetLogin('15.34.49.99').test()
-   NetLogin('15.34.21.85').test()
-   NetLogin('34.1.3.25').test()
-   NetLogin('34.112.31.2').test()
+   NetLogin('10.33.128.60').test()
+   NetLogin('10.33.128.52').test()
