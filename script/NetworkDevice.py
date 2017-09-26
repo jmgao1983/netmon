@@ -21,7 +21,7 @@ device_netcap = {
     },
     'huawei': {
         'prompt': '>',
-        'page': 'screen-length 0',
+        'page': 'screen-length 0 temporary',
         'conf': ['disp curr'],
         'routesum': ['disp ip rout stat'],
         'route': ['disp ip rout'],

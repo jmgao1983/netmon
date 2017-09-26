@@ -51,20 +51,20 @@ class NetMon(class_login.NetLogin):
                return
             if i == 1:
                if line[2] > 0:
-                  msg = self.name + line[1] + ':线路中断'
+                  msg = self.name + line[1] + u':线路中断'
                   my_alert(msg, line[1])
             if i == 0:
                rtt = int(obj.after.split(' ')[2])
                if line[2] == 0:
-                  msg = self.name + line[1] + ':线路恢复' + rtt + 'ms'
+                  msg = self.name + line[1] + u':线路恢复' + str(rtt) + 'ms'
                   my_alert(msg, line[1])
                elif line[2] > 100:
                   if rtt < 100:
-                     msg = self.name + line[1] + ': 线路延时恢复' + rtt + 'ms'
+                     msg = self.name + line[1] + u': 线路延时恢复' + str(rtt) + 'ms'
                      my_alert(msg, line[1])
                else:
                   if rtt > 100:
-                     msg = self.name + line[1] + ': 线路延时过高' + rtt + 'ms'
+                     msg = self.name + line[1] + u': 线路延时过高' + str(rtt) + 'ms'
                      my_alert(msg, line[1])
 
             list_tdes.append(line[1])
@@ -83,5 +83,5 @@ class NetMon(class_login.NetLogin):
 ### test code
 if __name__ == '__main__':
 
-   NetMon('10.33.128.60').mon()
-   NetMon('10.33.2.148').mon()
+   NetMon('10.33.128.52').mon()
+   #NetMon('10.33.2.148').mon()

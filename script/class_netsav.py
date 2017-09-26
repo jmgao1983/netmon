@@ -3,8 +3,9 @@
 #'RPing(Remote Ping): auto-login net devices and save config'
 
 import pexpect, os, time, hashlib, class_login
-from db_fun import xgetone, xgetall
 from my_log import logger
+from netmon_env import base_dir
+from NetworkDevice import device_netcap
 
 ###class definition
 class NetSav(class_login.NetLogin):
@@ -14,49 +15,33 @@ class NetSav(class_login.NetLogin):
 
 
    def save(self):
-      #check 'login_mode' describe in 'class_login.py'
-      provider = (self.login_mode % 1000) / 10
-      if provider == 1 or provider == 6:
-         self.cisco_save(self.login())
-      elif provider == 2:
-         self.h3c_save(self.login())
-      elif provider == 3:
-         self.huawei_save(self.login())
-      elif provider == 4:
-         self.cisco_save(self.login())
-      elif provider == 5:
-         self.junos_save(self.login())
-      else:
-         logger.error(self.ip + ' Error : device with unknown provider!')
-
-
-   ##cisco_save
-   def cisco_save(self, obj):
-      if obj == None:
+      if device_netcap.get(self.corp) == None:
+         logger.error(self.ip + ' Error : unsupported device!')
          return
+
+      obj = self.login()
+      if obj == None:
+         logger.error(self.ip + ' Error : saving config failed due to login error!')
+         return
+
+      prompt = self.name + device_netcap.get(self.corp).get('prompt')
+      pageCmd = device_netcap.get(self.corp).get('page')
+      saveCmd = device_netcap.get(self.corp).get('conf')[0]
+
       try:
-         obj.sendline('terminal len 0')
-         obj.expect([self.wait2, pexpect.TIMEOUT], timeout=2)
+         obj.sendline(pageCmd)
+         obj.expect([prompt, pexpect.TIMEOUT], timeout=3)
 
          #capture running-configration
-         logger.debug(self.ip + ' executing [sh run]')
-         obj.sendline('sh run')
-         i = obj.expect([self.wait2, pexpect.TIMEOUT], timeout=20)
+         logger.debug(self.ip + ' executing: ' + saveCmd)
+         obj.sendline(saveCmd)
+         i = obj.expect([prompt, pexpect.TIMEOUT], timeout=20)
          if i == 1:
-            logger.error(self.ip + ' error exec [sh run]')
+            logger.error(self.ip + ' error exec ' + saveCmd)
             obj.close()
             return
          self.txt_conf = obj.before
-         '''
-         #copy run start
-         logger.debug(self.ip + ' executing [write]')
-         obj.sendline('write')
-         i = obj.expect([self.wait2, pexpect.TIMEOUT], timeout=100)
-         if i == 1:
-            logger.error(self.ip + ' error exec [write]')
-            obj.close()
-            return
-         '''
+         
          logger.debug(self.ip + ' logged out!')
          obj.close()
       except Exception as e:
@@ -65,108 +50,6 @@ class NetSav(class_login.NetLogin):
          return
       else:
          self.save_to_disk()
-
-
-   ##h3c_save
-   def h3c_save(self, obj):
-      if obj == None:
-         return
-      try:
-         obj.sendline('screen-length disable')
-         obj.expect(self.wait1, timeout=2)
-
-         #capture running-configration
-         logger.debug(self.ip + ' executing [disp curr]')
-         obj.sendline('disp curr')
-         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=80)
-         if i == 1:
-            logger.error(self.ip + ' error exec [disp curr]')
-            obj.close()
-            return
-         self.txt_conf = obj.before
-         '''
-         #save config
-         logger.debug(self.ip + ' executing [save]')
-         obj.sendline("save safe\ny\n\ny\n")
-         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=100)
-         if i == 1:
-            logger.error(self.ip + ' error exec [save]')
-            obj.close()
-            return
-         '''
-         logger.debug(self.ip + ' logged out!')
-         obj.close()
-      except Exception as e:
-         logger.error(self.ip + ' ' + str(e))
-         obj.close()
-         return
-      else:
-         self.save_to_disk()
-
-   ##huawei_save
-   def huawei_save(self, obj):
-      if obj == None:
-         return
-      try:
-         obj.sendline('screen-length 0')
-         obj.expect(self.wait1, timeout=2)
-
-         #capture running-configration
-         logger.debug(self.ip + ' executing [disp curr]')
-         obj.sendline('disp curr')
-         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=60)
-         if i == 1:
-            logger.error(self.ip + ' error exec [disp curr]')
-            obj.close()
-            return
-         self.txt_conf = obj.before
-         '''
-         #save config
-         logger.debug(self.ip + ' executing [save]')
-         obj.sendline("save\ny")
-         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=100)
-         if i == 1:
-            logger.error(self.ip + ' error exec [save]')
-            obj.close()
-            return
-         '''
-         logger.debug(self.ip + ' logged out!')
-         obj.close()
-      except Exception as e:
-         logger.error(self.ip + ' ' + str(e))
-         obj.close()
-         return
-      else:
-         self.save_to_disk()
-
-   #junos
-   def junos_save(self, obj):
-      if obj == None:
-         return
-      try:
-         obj.sendline('set cli screen-length 0')
-         obj.expect([self.wait1, pexpect.TIMEOUT], timeout=2)
-
-         #capture running-configration
-         logger.debug(self.ip + ' executing [show config]')
-         obj.sendline('show config')
-         i = obj.expect([self.wait1, pexpect.TIMEOUT], timeout=20)
-         if i == 1:
-            logger.error(self.ip + ' error exec [show config]')
-            obj.close()
-            return
-         self.txt_conf = obj.before
-
-         logger.debug(self.ip + ' logged out!')
-         obj.close()
-      except Exception as e:
-         logger.error(self.ip + ' ' + str(e))
-         obj.close()
-         return
-      else:
-         self.save_to_disk()
-
-
 
    ##save config to disk
    def save_to_disk(self):
@@ -175,7 +58,7 @@ class NetSav(class_login.NetLogin):
 
       fname = self.name + '-' + timestr
       city = hashlib.md5((self.city).encode('UTF-8')).hexdigest()
-      fpath = r'/var/www/html/netmon/down/conf/%s/%s' % (city, self.name)
+      fpath = base_dir + r'/down/conf/%s/%s' % (city, self.name)
       if not os.path.exists(fpath):
          try:
             os.makedirs(fpath)
@@ -200,11 +83,5 @@ class NetSav(class_login.NetLogin):
 ### test code
 if __name__ == '__main__':
 
-   #NetSav('34.0.30.35').save()
-   #NetSav('34.0.30.45').save()
-   NetSav('34.0.223.2').save()
-   #NetSav('15.34.254.5').save()
-   #NetSav('15.34.81.253').save()
-   #NetSav('15.34.177.253').save()
-   #NetSav('15.34.49.99').save()
+   NetSav('10.33.2.148').save()
    #NetSav('15.34.21.85').save()
