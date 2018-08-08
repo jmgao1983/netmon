@@ -8,13 +8,16 @@ from my_alert import my_alert
 from my_log import logger
 from NetworkDevice import device_netmon
 
+# RTT_MAX
+RTT_MAX=9999
+
 ###class definition
 class NetMon(class_login.NetLogin):
    def __init__(self, ip):
       class_login.NetLogin.__init__(self, ip)
       self.target = ()
       if self.name != '':
-         sql = "select tip,tdes,rtt from target where pri>0 and rname='%s'" % self.name
+         sql = "select tip,tdes,rtt from target where rname='%s'" % self.name
          self.target = xgetall(sql)
 
 
@@ -58,12 +61,12 @@ class NetMon(class_login.NetLogin):
                if line[2] == 0:
                   msg = self.name + line[1] + u':线路恢复' + str(rtt) + 'ms'
                   my_alert(msg, line[1])
-               elif line[2] > 100:
-                  if rtt < 100:
+               elif line[2] > RTT_MAX:
+                  if rtt < RTT_MAX:
                      msg = self.name + line[1] + u': 线路延时恢复' + str(rtt) + 'ms'
                      my_alert(msg, line[1])
                else:
-                  if rtt > 100:
+                  if rtt > RTT_MAX:
                      msg = self.name + line[1] + u': 线路延时过高' + str(rtt) + 'ms'
                      my_alert(msg, line[1])
 
@@ -83,5 +86,5 @@ class NetMon(class_login.NetLogin):
 ### test code
 if __name__ == '__main__':
 
-   NetMon('10.33.128.52').mon()
+   NetMon('10.33.128.60').mon()
    #NetMon('10.33.2.148').mon()

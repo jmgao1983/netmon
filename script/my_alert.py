@@ -39,7 +39,7 @@ def my_alert(msg, tdes):
       temp = (str(p).strip(';')).split(';')
       phone.extend(temp)
 
-   #获取用户所在城市的告警邮箱和手机号码
+   #获取用户所在组的告警邮箱和手机号码
    sql="select mail1, mail2, phone from user where city='%s'" % city
    if xgetall(sql) != None:
       mlists = xgetall(sql)
@@ -73,7 +73,8 @@ def my_alert(msg, tdes):
    #print mail_ext
    #print phone
    if mail_int != []:
-      send_mail(timestr+msg, detail, mail_int)
+      if (pri > 0 or (t_hour>7 and t_hour<24)):
+         send_mail(timestr+msg, detail, mail_int)
    if mail_ext != []:
       if (pri > 1 or (t_hour>6 and t_hour<21)):
          send_mail_ext(timestr+msg, detail, mail_ext)
@@ -91,5 +92,5 @@ def my_alert(msg, tdes):
 if __name__ == '__main__':
    #sql = "select mail1 from user where name='hzjh'"
    #print xgetone(sql)
-   my_alert(u'this is msg', '银联DX')
+   my_alert(u'this is a test msg', '工商银行生产')
 
