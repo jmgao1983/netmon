@@ -57,7 +57,7 @@ class NetMon(class_login.NetLogin):
                   msg = self.name + line[1] + u':线路中断'
                   my_alert(msg, line[1])
             if i == 0:
-               rtt = int(obj.after.split(' ')[2])
+               rtt = int(obj.after.split(' ')[2]) + 1
                if line[2] == 0:
                   msg = self.name + line[1] + u':线路恢复' + str(rtt) + 'ms'
                   my_alert(msg, line[1])
