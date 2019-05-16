@@ -82,7 +82,6 @@ def send_mail_ext(sub,content,receiver):
 
 if __name__ == '__main__':
 
-    list1=['gaojianming.zj@139.com','16015@etransfar.com']
-    list3=['gaojianming.zj@ccb.com']
+    list1=['gaojianming.zj@139.com','testjmgao@163.com']
     list2 = []
     send_mail(u'这是python测试邮件22',u'python发送邮件',list1)
